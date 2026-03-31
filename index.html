@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dhia & Linda — Mariage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:    #c9a84c;
+      --gold-lt: #e8d18a;
+      --beige:   #f5efe6;
+      --cream:   #fdf9f3;
+      --nude:    #e8c9b0;
+      --nude-lt: #f2e0d3;
+      --white:   #ffffff;
+      --text:    #4a3f35;
+      --text-lt: #7a6b5e;
+      --shadow:  rgba(180,140,90,0.18);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ──────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      padding: 18px 40px;
+      display: flex; align-items: center; justify-content: center; gap: 40px;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(253,249,243,0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 20px var(--shadow);
+    }
+    nav a {
+      font-size: 0.72rem; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--white); text-decoration: none; font-weight: 500;
+      transition: color 0.3s, opacity 0.3s;
+    }
+    nav.scrolled a { color: var(--text); }
+    nav a:hover { color: var(--gold); opacity: 1; }
+    .nav-divider { color: var(--gold-lt); font-size: 1rem; opacity: 0.6; }
+    .nav-links { display: flex; align-items: center; gap: 40px; }
+
+    /* Hamburger button */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 1100;
+      flex-shrink: 0;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.32s ease, opacity 0.32s ease;
+    }
+    nav.scrolled .nav-hamburger span { background: var(--text); }
+    .nav-hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ─── HERO ─────────────────────────────────────────── */
+    #hero {
+      position: relative; width: 100%; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(30,18,10,0.42) 0%, rgba(60,35,15,0.55) 100%),
+        url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1800&auto=format&fit=crop&q=80')
+        center/cover no-repeat fixed;
+    }
+    /* Subtle bokeh overlay */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 60% 40%, rgba(201,168,76,0.12) 0%, transparent 60%),
+                  radial-gradient(ellipse at 30% 70%, rgba(232,193,176,0.10) 0%, transparent 50%);
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      text-align: center; padding: 24px;
+      animation: fadeUp 1.4s ease both;
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--gold-lt); margin-bottom: 20px;
+      animation: fadeUp 1.2s 0.2s ease both; opacity: 0;
+    }
+    .hero-names {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(4.5rem, 12vw, 9rem);
+      color: var(--white);
+      line-height: 1.05;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+      animation: fadeUp 1.2s 0.4s ease both; opacity: 0;
+    }
+    .hero-ampersand { color: var(--gold-lt); }
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      margin: 24px auto; max-width: 320px;
+      animation: fadeUp 1.2s 0.6s ease both; opacity: 0;
+    }
+    .hero-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-lt), transparent); }
+    .hero-diamond { color: var(--gold-lt); font-size: 0.6rem; }
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      font-style: italic; font-weight: 300;
+      color: rgba(255,255,255,0.88);
+      letter-spacing: 1px; line-height: 1.7;
+      animation: fadeUp 1.2s 0.8s ease both; opacity: 0;
+    }
+    .hero-dates {
+      margin-top: 28px;
+      display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
+      animation: fadeUp 1.2s 1s ease both; opacity: 0;
+    }
+    .hero-date-chip {
+      border: 1px solid rgba(201,168,76,0.5);
+      padding: 10px 24px; border-radius: 40px;
+      color: var(--gold-lt); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: rgba(255,255,255,0.55); font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase;
+      animation: bounce 2s 2s infinite;
+    }
+    .scroll-hint i { font-size: 1rem; color: var(--gold-lt); }
+
+    /* ─── SECTION COMMON ───────────────────────────────── */
+    section { position: relative; }
+    .section-inner {
+      max-width: 960px; margin: 0 auto;
+      padding: 100px 40px;
+    }
+    .section-label {
+      font-size: 0.65rem; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px; text-align: center;
+    }
+    .section-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.8rem, 6vw, 4.2rem);
+      text-align: center; color: var(--text);
+      margin-bottom: 16px;
+    }
+    .section-ornament {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin: 0 auto 52px;
+    }
+    .orn-line { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--gold)); }
+    .orn-line.r { background: linear-gradient(to left, transparent, var(--gold)); }
+    .orn-icon { color: var(--gold); font-size: 0.65rem; }
+
+    /* reveal on scroll */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── STORY ────────────────────────────────────────── */
+    #story { background: var(--white); }
+    .story-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.18rem; line-height: 1.9;
+      color: var(--text-lt); text-align: center; max-width: 680px; margin: 0 auto 60px;
+      font-style: italic;
+    }
+    .story-timeline {
+      display: flex; flex-direction: column; gap: 0;
+      position: relative; max-width: 600px; margin: 0 auto;
+    }
+    .story-timeline::before {
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+      width: 1px; background: linear-gradient(to bottom, transparent, var(--gold), var(--nude), transparent);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      display: grid; grid-template-columns: 1fr 48px 1fr;
+      align-items: center; gap: 0; margin-bottom: 32px;
+    }
+    .timeline-item:nth-child(odd) .tl-content { grid-column: 1; text-align: right; padding-right: 28px; }
+    .timeline-item:nth-child(odd) .tl-empty  { grid-column: 3; }
+    .timeline-item:nth-child(even) .tl-content { grid-column: 3; text-align: left; padding-left: 28px; }
+    .timeline-item:nth-child(even) .tl-empty  { grid-column: 1; }
+    .tl-dot {
+      grid-column: 2; width: 14px; height: 14px; border-radius: 50%;
+      background: var(--gold); border: 3px solid var(--cream);
+      box-shadow: 0 0 0 2px var(--gold);
+      margin: 0 auto;
+    }
+    .tl-year {
+      font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 4px;
+    }
+    .tl-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--text-lt); font-style: italic; line-height: 1.5;
+    }
+
+    /* ─── PROGRAM ──────────────────────────────────────── */
+    #program { background: var(--beige); }
+    .program-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+    }
+    .program-day {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 40px 36px;
+      box-shadow: 0 8px 40px var(--shadow);
+      border-top: 3px solid var(--gold);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .program-day:hover { transform: translateY(-6px); box-shadow: 0 16px 50px var(--shadow); }
+    .program-day-header {
+      text-align: center; margin-bottom: 32px;
+    }
+    .program-day-num {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.2rem; color: var(--gold); line-height: 1;
+    }
+    .program-day-month {
+      font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--text-lt); margin-top: 4px;
+    }
+    .program-item {
+      display: flex; gap: 18px; align-items: flex-start;
+      padding: 16px 0; border-bottom: 1px solid var(--beige);
+    }
+    .program-item:last-child { border-bottom: none; }
+    .program-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--nude));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .program-icon i { color: var(--white); font-size: 0.85rem; }
+    .program-info { flex: 1; }
+    .program-time {
+      font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 3px;
+    }
+    .program-event {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem; color: var(--text); font-weight: 600;
+    }
+    .program-event-desc {
+      font-size: 0.78rem; color: var(--text-lt); margin-top: 2px; line-height: 1.5;
+    }
+
+    /* ─── LOCATION ─────────────────────────────────────── */
+    #location { background: var(--white); }
+    .location-venues { display: flex; flex-direction: column; gap: 44px; }
+    .venue-card {
+      background: var(--cream); border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px var(--shadow);
+      border-top: 3px solid var(--gold);
+    }
+    .venue-date-badge {
+      background: linear-gradient(135deg, var(--gold), #b8923e);
+      color: var(--white); text-align: center;
+      padding: 12px 24px;
+      font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 500;
+    }
+    .location-wrap {
+      display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: center;
+      padding: 36px 36px;
+    }
+    .location-info { }
+    .location-name {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.4rem; color: var(--gold); margin-bottom: 12px;
+    }
+    .location-address {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; color: var(--text-lt); font-style: italic;
+      line-height: 1.7; margin-bottom: 24px;
+    }
+    .location-meta {
+      display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px;
+    }
+    .location-meta-item {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.82rem; color: var(--text-lt); letter-spacing: 0.5px;
+    }
+    .location-meta-item i { color: var(--gold); width: 16px; }
+    .btn-directions {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--gold), #b8923e);
+      color: var(--white); text-decoration: none;
+      padding: 13px 28px; border-radius: 40px;
+      font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+      font-weight: 500;
+      box-shadow: 0 6px 24px rgba(180,140,60,0.35);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .btn-directions:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(180,140,60,0.45); }
+    .map-container {
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 12px 50px var(--shadow);
+      height: 360px;
+    }
+    .map-container iframe { width: 100%; height: 100%; border: none; }
+
+    /* ─── GALLERY ───────────────────────────────────────── */
+    #gallery { background: var(--beige); }
+    .gallery-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; text-align: center;
+      color: var(--text-lt); font-size: 1.05rem; margin-bottom: 48px;
+    }
+    /* Single photo */
+    .gallery-photo-wrap {
+      max-width: 780px; margin: 0 auto;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 20px 70px var(--shadow);
+      position: relative;
+    }
+    .gallery-photo-wrap img {
+      width: 100%; height: 520px; object-fit: cover; display: block;
+    }
+    .gallery-photo-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 36px 36px 30px;
+      background: linear-gradient(to top, rgba(40,25,10,0.72) 0%, transparent 100%);
+      color: var(--white);
+    }
+    .gallery-photo-caption-title {
+      font-family: 'Great Vibes', cursive; font-size: 2.4rem;
+      color: var(--gold-lt); margin-bottom: 4px;
+    }
+    .gallery-photo-caption-sub {
+      font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8;
+    }
+    @media (max-width: 768px) {
+      .gallery-photo-wrap img { height: 320px; }
+    }
+
+    /* ─── RSVP / FOOTER ────────────────────────────────── */
+    #rsvp {
+      background: linear-gradient(135deg, #2c1e12 0%, #3e2c1a 50%, #2c1e12 100%);
+      text-align: center; padding: 120px 40px;
+      position: relative; overflow: hidden;
+    }
+    #rsvp::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1400&auto=format&fit=crop&q=60')
+        center/cover no-repeat;
+      opacity: 0.12;
+    }
+    .rsvp-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+    .rsvp-label { font-size: 0.65rem; letter-spacing: 5px; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 14px; }
+    .rsvp-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.8rem, 7vw, 4.8rem);
+      color: var(--white); margin-bottom: 20px;
+    }
+    .rsvp-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.1rem; color: rgba(255,255,255,0.72);
+      line-height: 1.8; margin-bottom: 40px;
+    }
+    .rsvp-divider {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin-bottom: 40px;
+    }
+    .rsvp-divider-line { width: 80px; height: 1px; background: rgba(201,168,76,0.4); }
+    .rsvp-divider i { color: var(--gold); font-size: 0.7rem; }
+    .rsvp-names {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.2rem; color: var(--gold-lt);
+    }
+
+    footer {
+      background: #1c1208; color: rgba(255,255,255,0.35);
+      text-align: center; padding: 28px;
+      font-size: 0.7rem; letter-spacing: 1.5px;
+    }
+    footer span { color: var(--gold); }
+
+    /* ─── KEYFRAMES ─────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ─── RESPONSIVE ────────────────────────────────────── */
+    @media (max-width: 768px) {
+      /* ── Navigation hamburger ── */
+      nav { justify-content: flex-end; padding: 14px 20px; }
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        position: fixed; inset: 0; z-index: 999;
+        flex-direction: column; align-items: center; justify-content: center;
+        gap: 36px;
+        background: rgba(253,249,243,0.97);
+        backdrop-filter: blur(18px);
+        opacity: 0; pointer-events: none;
+        transition: opacity 0.35s ease;
+      }
+      .nav-links.open { opacity: 1; pointer-events: all; }
+      .nav-links a {
+        font-size: 1rem;
+        color: var(--text) !important;
+        letter-spacing: 3px;
+      }
+      .nav-links .nav-divider { display: none; }
+
+      /* ── Sections ── */
+      .section-inner { padding: 70px 24px; }
+
+      /* ── Hero ── */
+      .hero-dates { gap: 12px; flex-direction: column; align-items: center; }
+      .hero-date-chip { font-size: 0.7rem; padding: 9px 20px; }
+
+      /* ── Story timeline ── */
+      .story-timeline::before { left: 20px; }
+      .timeline-item { grid-template-columns: 20px 1fr; }
+      .timeline-item:nth-child(odd) .tl-content,
+      .timeline-item:nth-child(even) .tl-content {
+        grid-column: 2; text-align: left; padding-left: 20px; padding-right: 0;
+      }
+      .tl-dot { grid-column: 1; }
+      .timeline-item:nth-child(odd) .tl-empty,
+      .timeline-item:nth-child(even) .tl-empty { display: none; }
+
+      /* ── Programme ── */
+      .program-grid { grid-template-columns: 1fr; }
+      .program-day { padding: 28px 20px; }
+
+      /* ── Lieu ── */
+      .location-wrap { grid-template-columns: 1fr; padding: 24px; }
+      .map-container { height: 260px; }
+      .btn-directions { width: 100%; justify-content: center; }
+
+      /* ── Galerie ── */
+      .gallery-photo-wrap img { height: 320px; }
+
+      /* ── RSVP ── */
+      #rsvp { padding: 80px 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-names { font-size: clamp(3.2rem, 18vw, 5rem); }
+      .section-title { font-size: 2.4rem; }
+      .program-day-num { font-size: 2.4rem; }
+      .location-name { font-size: 1.8rem; }
+      .gallery-photo-wrap img { height: 260px; }
+      .rsvp-names { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav id="navbar">
+  <button class="nav-hamburger" id="navHamburger" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="#story">Notre Histoire</a>
+    <span class="nav-divider">◆</span>
+    <a href="#program">Programme</a>
+    <span class="nav-divider">◆</span>
+    <a href="#location">Lieu</a>
+    <span class="nav-divider">◆</span>
+    <a href="#gallery">Galerie</a>
+    <span class="nav-divider">◆</span>
+    <a href="#rsvp">Contact</a>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Invitation au mariage</p>
+    <h1 class="hero-names">Dhia <span class="hero-ampersand">&amp;</span> Linda</h1>
+    <div class="hero-divider">
+      <div class="hero-line"></div>
+      <span class="hero-diamond">◆</span>
+      <div class="hero-line"></div>
+    </div>
+    <p class="hero-subtitle">
+      Nous avons le plaisir de vous inviter<br>à célébrer notre mariage
+    </p>
+    <div class="hero-dates">
+      <span class="hero-date-chip">22 Juillet 2026</span>
+      <span class="hero-date-chip">24 Juillet 2026</span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <i class="fas fa-chevron-down"></i>
+    <span>Découvrir</span>
+  </div>
+</section>
+
+<!-- ═══════════════ STORY ═══════════════ -->
+<section id="story">
+  <div class="section-inner">
+    <p class="section-label reveal">Notre histoire</p>
+    <h2 class="section-title reveal">Une histoire d'amour</h2>
+    <div class="section-ornament reveal">
+      <div class="orn-line"></div>
+      <i class="fas fa-heart orn-icon"></i>
+      <div class="orn-line r"></div>
+    </div>
+    <p class="story-text reveal">
+      Certaines rencontres changent tout. La nôtre a été une évidence — un regard, un sourire,
+      et le sentiment que quelque chose d'extraordinaire venait de commencer.
+      Depuis ce jour, chaque moment partagé a été un cadeau, et nous ne pouvons imaginer
+      un avenir plus beau que celui que nous allons construire ensemble.
+    </p>
+    <div class="story-timeline">
+      <div class="timeline-item reveal">
+        <div class="tl-content">
+          <div class="tl-year">Le début</div>
+          <div class="tl-desc">Notre première rencontre — un instant gravé dans nos mémoires pour toujours.</div>
+        </div>
+        <div class="tl-dot"></div>
+        <div class="tl-empty"></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-empty"></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-year">Les fiançailles</div>
+          <div class="tl-desc">Une bague, deux cœurs, et une promesse gravée dans l'éternité — le plus beau « oui » avant le grand « oui ».</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-content">
+          <div class="tl-year">La demande</div>
+          <div class="tl-desc">Un moment magique, une question, et un « oui » venu du cœur.</div>
+        </div>
+        <div class="tl-dot"></div>
+        <div class="tl-empty"></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-empty"></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-year">Juillet 2026</div>
+          <div class="tl-desc">Nous vous invitons à partager avec nous le plus beau jour de notre vie.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PROGRAM ═══════════════ -->
+<section id="program">
+  <div class="section-inner">
+    <p class="section-label reveal">Les célébrations</p>
+    <h2 class="section-title reveal">Programme</h2>
+    <div class="section-ornament reveal">
+      <div class="orn-line"></div>
+      <i class="fas fa-calendar-days orn-icon"></i>
+      <div class="orn-line r"></div>
+    </div>
+    <div class="program-grid">
+      <!-- Day 1 -->
+      <div class="program-day reveal">
+        <div class="program-day-header">
+          <div class="program-day-num">22</div>
+          <div class="program-day-month">Juillet 2026</div>
+        </div>
+        <div class="program-item">
+          <div class="program-icon"><i class="fas fa-utensils"></i></div>
+          <div class="program-info">
+            <div class="program-time">19h00 — 21h00</div>
+            <div class="program-event">Dîner</div>
+            <div class="program-event-desc">Un repas raffiné partagé avec nos proches dans une ambiance chaleureuse.</div>
+          </div>
+        </div>
+        <div class="program-item">
+          <div class="program-icon"><i class="fas fa-music"></i></div>
+          <div class="program-info">
+            <div class="program-time">À partir de 21h00</div>
+            <div class="program-event">Soirée — Wteya</div>
+            <div class="program-event-desc">Une nuit de fête, de musique et de danse pour célébrer notre union.</div>
+          </div>
+        </div>
+      </div>
+      <!-- Day 2 -->
+      <div class="program-day reveal">
+        <div class="program-day-header">
+          <div class="program-day-num">24</div>
+          <div class="program-day-month">Juillet 2026</div>
+        </div>
+        <div class="program-item">
+          <div class="program-icon"><i class="fas fa-rings-wedding"></i></div>
+          <div class="program-info">
+            <div class="program-time">À partir de 20h00</div>
+            <div class="program-event">Cérémonie de Mariage</div>
+            <div class="program-event-desc">Le moment tant attendu — l'échange de nos vœux et de nos alliances.</div>
+          </div>
+        </div>
+        <div class="program-item">
+          <div class="program-icon"><i class="fas fa-champagne-glasses"></i></div>
+          <div class="program-info">
+            <div class="program-time">Après la cérémonie</div>
+            <div class="program-event">Réception & Festivités</div>
+            <div class="program-event-desc">Dîner, musique et danse pour une nuit inoubliable ensemble.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LOCATION ═══════════════ -->
+<section id="location">
+  <div class="section-inner">
+    <p class="section-label reveal">Nous vous attendons</p>
+    <h2 class="section-title reveal">Lieu</h2>
+    <div class="section-ornament reveal">
+      <div class="orn-line"></div>
+      <i class="fas fa-location-dot orn-icon"></i>
+      <div class="orn-line r"></div>
+    </div>
+    <div class="location-venues">
+
+      <!-- ── Salle 1 : 22 Juillet — My Way ── -->
+      <div class="venue-card reveal">
+        <div class="venue-date-badge">22 Juillet · Dîner & Soirée Wteya</div>
+        <div class="location-wrap">
+          <div class="location-info">
+            <div class="location-name">My Way</div>
+            <p class="location-address">
+              Salle des fêtes My Way<br>
+              Tunis, Tunisie
+            </p>
+            <div class="location-meta">
+              <div class="location-meta-item">
+                <i class="fas fa-utensils"></i>
+                <span>Dîner : 19h00 – 21h00</span>
+              </div>
+              <div class="location-meta-item">
+                <i class="fas fa-music"></i>
+                <span>Soirée (wteya) : à partir de 21h00</span>
+              </div>
+              <div class="location-meta-item">
+                <i class="fas fa-car"></i>
+                <span>Parking disponible sur place</span>
+              </div>
+            </div>
+            <a href="https://www.google.com/maps/place/My+Way/@36.8332313,10.2290185,697m/data=!3m2!1e3!4b1!4m6!3m5!1s0x12fd35155d6eed09:0xde72910a5d65155e!8m2!3d36.8332314!4d10.2338894!16s%2Fg%2F1th6gyrl" target="_blank" rel="noopener noreferrer" class="btn-directions">
+              <i class="fas fa-diamond-turn-right"></i>
+              Obtenir l'itinéraire
+            </a>
+          </div>
+          <div class="map-container">
+            <iframe
+              src="https://maps.google.com/maps?q=36.8332314,10.2338894&z=16&output=embed"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="My Way — Salle des fêtes"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Salle 2 : 24 Juillet — Champs Élysées ── -->
+      <div class="venue-card reveal">
+        <div class="venue-date-badge">24 Juillet · Cérémonie de Mariage</div>
+        <div class="location-wrap">
+          <div class="location-info">
+            <div class="location-name">Champs Élysées</div>
+            <p class="location-address">
+              Salle des fêtes Champs Élysées<br>
+              Sousse, Tunisie
+            </p>
+            <div class="location-meta">
+              <div class="location-meta-item">
+                <i class="fas fa-rings-wedding"></i>
+                <span>Cérémonie : à partir de 20h00</span>
+              </div>
+              <div class="location-meta-item">
+                <i class="fas fa-champagne-glasses"></i>
+                <span>Réception & festivités après la cérémonie</span>
+              </div>
+              <div class="location-meta-item">
+                <i class="fas fa-car"></i>
+                <span>Parking disponible sur place</span>
+              </div>
+            </div>
+            <a href="https://www.google.com/maps/place/Salle+des+f%C3%AAtes+champs+elys%C3%A9es/@35.6756693,10.1243108,707m/data=!3m2!1e3!4b1!4m6!3m5!1s0x12fdc50066c72575:0xdc288d7c10bfd42!8m2!3d35.6756693!4d10.1268857!16s%2Fg%2F11mcbyw9yr" target="_blank" rel="noopener noreferrer" class="btn-directions">
+              <i class="fas fa-diamond-turn-right"></i>
+              Obtenir l'itinéraire
+            </a>
+          </div>
+          <div class="map-container">
+            <iframe
+              src="https://maps.google.com/maps?q=35.6756693,10.1268857&z=16&output=embed"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Salle des fêtes Champs Élysées"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ GALLERY ═══════════════ -->
+<section id="gallery">
+  <div class="section-inner">
+    <p class="section-label reveal">Nos moments</p>
+    <h2 class="section-title reveal">Galerie</h2>
+    <div class="section-ornament reveal">
+      <div class="orn-line"></div>
+      <i class="fas fa-images orn-icon"></i>
+      <div class="orn-line r"></div>
+    </div>
+    <p class="gallery-intro reveal">Là où tout commence.</p>
+    <div class="gallery-photo-wrap reveal">
+      <img src="images/linda-dhia.JPG" alt="Dhia & Linda" />
+      <div class="gallery-photo-caption">
+        <div class="gallery-photo-caption-title">Dhia & Linda</div>
+        <div class="gallery-photo-caption-sub">17 Août 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ RSVP / CLOSING ═══════════════ -->
+<section id="rsvp">
+  <div class="rsvp-inner">
+    <p class="rsvp-label reveal">Rejoignez-nous</p>
+    <h2 class="rsvp-title reveal">Avec joie &amp; amour</h2>
+    <p class="rsvp-text reveal">
+      Votre présence à nos côtés est le plus beau cadeau que vous puissiez nous offrir.
+      Nous avons hâte de partager ce moment magique avec vous.
+    </p>
+    <div class="rsvp-divider reveal">
+      <div class="rsvp-divider-line"></div>
+      <i class="fas fa-heart"></i>
+      <div class="rsvp-divider-line"></div>
+    </div>
+    <div class="rsvp-names reveal">Dhia & Linda</div>
+  </div>
+</section>
+
+<footer>
+  Fait avec <span>♥</span> pour Dhia & Linda · Juillet 2026
+</footer>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+  /* --- NAV scroll behavior --- */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  /* --- Scroll reveal --- */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* --- Parallax hero --- */
+  const heroBg = document.querySelector('.hero-bg');
+  window.addEventListener('scroll', () => {
+    const offset = window.scrollY;
+    if (offset < window.innerHeight) {
+      heroBg.style.transform = `translateY(${offset * 0.35}px)`;
+    }
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger = document.getElementById('navHamburger');
+  const navLinks  = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    hamburger.classList.toggle('active', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+</script>
+</body>
+</html>
